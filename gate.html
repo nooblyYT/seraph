@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Access Required</title>
+  <style>
+    body {
+      background: #0f0f0f;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .box {
+      background: #1e1e1e;
+      padding: 25px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(255,255,255,0.2);
+    }
+    input {
+      padding: 8px;
+      width: 200px;
+      margin-top: 10px;
+      border-radius: 4px;
+      border: none;
+      text-align: center;
+    }
+    button {
+      margin-top: 10px;
+      padding: 8px 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      background-color: #4CAF50;
+      color: white;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #msg {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Enter Password</h2>
+    <input type="password" id="pw" placeholder="Password">
+    <br>
+    <button onclick="check()">Enter</button>
+    <p id="msg" style="color:red;"></p>
+  </div>
+
+  <script>
+    function check() {
+      const password = "Seraph123"; // ✅ Password
+      const input = document.getElementById("pw").value;
+
+      if (input === password) {
+        // sessionStorage expires when browser/tab closes
+        sessionStorage.setItem("seraph_auth", "true");
+        window.location.href = "index.html";
+      } else {
+        document.getElementById("msg").textContent = "Wrong password. Try again.";
+      }
+    }
+  </script>
+</body>
+</html>
