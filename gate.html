@@ -43,17 +43,13 @@
       cursor: pointer;
     }
 
-    button:hover {
-      background-color: #45a049;
-    }
-
     #msg {
       margin-top: 10px;
       font-weight: bold;
       color: red;
     }
 
-    /* Shake animation */
+    /* Shake */
     @keyframes shake {
       0% { transform: translateX(0); }
       25% { transform: translateX(-6px); }
@@ -77,34 +73,39 @@
     <p id="msg"></p>
   </div>
 
-  <!-- Vine boom audio -->
+  <!-- Sounds -->
   <audio id="boom" src="vine-boom.mp3"></audio>
+  <audio id="fahh" src="fahh.mp3"></audio>
 
   <script>
-    const inputField = document.getElementById("pw");
+    const input = document.getElementById("pw");
     const box = document.getElementById("loginBox");
     const boom = document.getElementById("boom");
+    const fahh = document.getElementById("fahh");
 
-    inputField.addEventListener("keydown", e => {
+    input.addEventListener("keydown", e => {
       if (e.key === "Enter") check();
     });
 
     function check() {
       const mainPassword = "YazenWasHere";
-      const rizzPassword = "ChigoNoRizz";
-      const input = inputField.value;
+      const chigoPassword = "ChigoNoRizz";
+      const value = input.value;
 
-      if (input === mainPassword) {
+      if (value === mainPassword) {
         sessionStorage.setItem("seraph_auth", "true");
         window.location.href = "index.html";
       }
-      else if (input === rizzPassword) {
-        boom.play();
+
+      else if (value === chigoPassword) {
+        fahh.play();
         setTimeout(() => {
           window.location.href = "chigo.html";
-        }, 300);
+        }, 250);
       }
+
       else {
+        boom.play();
         document.getElementById("msg").textContent = "Wrong password";
         box.classList.add("shake");
         setTimeout(() => box.classList.remove("shake"), 350);
