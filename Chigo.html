@@ -1,114 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Chigo</title>
-  <style>
-    body {
-      margin: 0;
-      background-color: black;
-      color: white;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      overflow: hidden;
-    }
+<meta charset="UTF-8">
+<title>Chigo</title>
+<style>
+body {
+  margin:0;
+  background:black;
+  color:white;
+  font-family:Arial,sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  overflow:hidden;
+}
 
-    /* Flashbang */
-    #flash {
-      position: fixed;
-      inset: 0;
-      background: white;
-      z-index: 10;
-      animation: flash 0.6s forwards;
-    }
+/* Flashbang */
+#flash {
+  position:fixed;
+  inset:0;
+  background:white;
+  z-index:10;
+  animation:flash 0.6s forwards;
+}
 
-    @keyframes flash {
-      0% { opacity: 1; }
-      100% { opacity: 0; }
-    }
+@keyframes flash {
+  0% { opacity:1; }
+  100% { opacity:0; }
+}
 
-    .content {
-      text-align: center;
-      opacity: 0;
-      animation: reveal 0.4s forwards;
-      animation-delay: 0.5s;
-    }
+.content {
+  text-align:center;
+  opacity:0;
+  animation:reveal 0.4s forwards;
+  animation-delay:0.5s;
+}
 
-    @keyframes reveal {
-      to { opacity: 1; }
-    }
+@keyframes reveal { to { opacity:1; } }
 
-    /* Shake + zoom animation */
-    @keyframes shakeZoom {
-      0%   { transform: scale(1) translate(0, 0); }
-      20%  { transform: scale(1.05) translate(-4px, 4px); }
-      40%  { transform: scale(0.95) translate(4px, -4px); }
-      60%  { transform: scale(1.08) translate(-3px, -3px); }
-      80%  { transform: scale(0.97) translate(3px, 3px); }
-      100% { transform: scale(1) translate(0, 0); }
-    }
+/* Shake + zoom */
+@keyframes shakeZoom {
+  0%   { transform:scale(1) translate(0,0); }
+  20%  { transform:scale(1.05) translate(-4px,4px); }
+  40%  { transform:scale(0.95) translate(4px,-4px); }
+  60%  { transform:scale(1.08) translate(-3px,-3px); }
+  80%  { transform:scale(0.97) translate(3px,3px); }
+  100% { transform:scale(1) translate(0,0); }
+}
 
-    img, h1 {
-      animation: shakeZoom 0.6s infinite;
-    }
+img,h1 {
+  animation:shakeZoom 0.6s infinite;
+}
 
-    img {
-      max-width: 350px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
+img {
+  max-width:350px;
+  border-radius:10px;
+  margin-bottom:20px;
+}
 
-    h1 {
-      color: red;
-      font-size: 2.6em;
-      text-shadow: 0 0 12px red;
-    }
-  </style>
+h1 {
+  color:red;
+  font-size:2.6em;
+  text-shadow:0 0 12px red;
+}
+</style>
 </head>
 <body>
 
-  <div id="flash"></div>
+<div id="flash"></div>
 
-  <div class="content">
-    <img src="chigo.gif" alt="Chigo no rizz">
-    <h1>Chigo has no rizz</h1>
-  </div>
+<div class="content">
+  <img src="chigo.gif" alt="Chigo no rizz">
+  <h1>Chigo has no rizz</h1>
+</div>
 
-  <!-- Sound effects -->
-  <audio id="fahh" src="fahh.mp3"></audio>
-  <audio class="sfx" src="chigo1.mp3"></audio>
-  <audio class="sfx" src="chigo2.mp3"></audio>
-  <audio class="sfx" src="chigo3.mp3"></audio>
+<script>
+window.addEventListener("DOMContentLoaded", () => {
+  // create audio objects dynamically
+  const fahh = new Audio("fahh.mp3");
+  const sfxFiles = ["chigo1.mp3","chigo2.mp3","chigo3.mp3"];
+  const sfxObjects = sfxFiles.map(file => new Audio(file));
+  const song = new Audio("chigosong.mp3");
+  song.loop = true;
 
-  <!-- Looping song -->
-  <audio id="song" src="chigosong.mp3" loop></audio>
+  // play fahh and all SFX simultaneously
+  const allSounds = [fahh, ...sfxObjects];
+  allSounds.forEach(audio => audio.play().catch(e=>console.log(e)));
 
-  <script>
-    const fahh = document.getElementById("fahh");
-    const sfx = document.querySelectorAll(".sfx");
-    const song = document.getElementById("song");
-
-    // Play all effects
-    fahh.play();
-    sfx.forEach(sound => sound.play());
-
-    // Wait until ALL sfx finish, then start song
-    let finished = 0;
-    const total = sfx.length + 1; // +1 for fahh
-
-    function done() {
+  // wait for all to end before starting song
+  let finished = 0;
+  allSounds.forEach(audio => {
+    audio.onended = () => {
       finished++;
-      if (finished === total) {
-        song.play();
+      if(finished === allSounds.length) {
+        song.play().catch(e=>console.log(e));
       }
-    }
-
-    fahh.onended = done;
-    sfx.forEach(sound => sound.onended = done);
-  </script>
+    };
+  });
+});
+</script>
 
 </body>
 </html>
