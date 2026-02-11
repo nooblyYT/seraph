@@ -49,7 +49,6 @@
       color: red;
     }
 
-    /* Shake */
     @keyframes shake {
       0% { transform: translateX(0); }
       25% { transform: translateX(-6px); }
@@ -73,15 +72,13 @@
     <p id="msg"></p>
   </div>
 
-  <!-- Sounds -->
+  <!-- ONLY vine boom lives here -->
   <audio id="boom" src="vine-boom.mp3"></audio>
-  <audio id="fahh" src="fahh.mp3"></audio>
 
   <script>
     const input = document.getElementById("pw");
     const box = document.getElementById("loginBox");
     const boom = document.getElementById("boom");
-    const fahh = document.getElementById("fahh");
 
     input.addEventListener("keydown", e => {
       if (e.key === "Enter") check();
@@ -96,15 +93,12 @@
         sessionStorage.setItem("seraph_auth", "true");
         window.location.href = "index.html";
       }
-
       else if (value === chigoPassword) {
-        fahh.play();
-        setTimeout(() => {
-          window.location.href = "chigo.html";
-        }, 250);
+        // 🔇 silent redirect
+        window.location.href = "chigo.html";
       }
-
       else {
+        boom.currentTime = 0;
         boom.play();
         document.getElementById("msg").textContent = "Wrong password";
         box.classList.add("shake");
