@@ -23,89 +23,63 @@
       box-shadow: 0 0 20px rgba(255,255,255,0.2);
     }
 
-    input {
-      width: 200px;
-      padding: 8px;
-      border-radius: 4px;
-      border: none;
-      margin-top: 10px;
-      text-align: center;
-    }
-
-    button {
-      margin-top: 10px;
-      padding: 8px 20px;
-      border-radius: 4px;
-      border: none;
-      background-color: #4CAF50;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    #msg {
-      margin-top: 10px;
-      font-weight: bold;
-      color: red;
-    }
-
-    @keyframes shake {
-      0% { transform: translateX(0); }
-      25% { transform: translateX(-6px); }
-      50% { transform: translateX(6px); }
-      75% { transform: translateX(-6px); }
-      100% { transform: translateX(0); }
-    }
-
-    .shake {
-      animation: shake 0.35s;
-    }
+    input { width: 200px; padding: 8px; border-radius: 4px; border: none; margin-top: 10px; text-align: center; }
+    button { margin-top: 10px; padding: 8px 20px; border-radius: 4px; border: none; background-color: #4CAF50; color: white; font-weight: bold; cursor: pointer; }
+    #msg { margin-top: 10px; font-weight: bold; color: red; }
+    @keyframes shake {0%{transform:translateX(0);}25%{transform:translateX(-6px);}50%{transform:translateX(6px);}75%{transform:translateX(-6px);}100%{transform:translateX(0);}}
+    .shake { animation: shake 0.35s; }
   </style>
 </head>
 <body>
 
-  <div class="box" id="loginBox">
-    <h2>Enter Password</h2>
-    <input type="password" id="pw" placeholder="Password">
-    <br>
-    <button onclick="check()">Enter</button>
-    <p id="msg"></p>
-  </div>
+<div class="box" id="loginBox">
+  <h2>Enter Password</h2>
+  <input type="password" id="pw" placeholder="Password">
+  <br>
+  <button onclick="check()">Enter</button>
+  <p id="msg"></p>
+</div>
 
-  <!-- ONLY vine boom lives here -->
-  <audio id="boom" src="vine-boom.mp3"></audio>
+<audio id="boom" src="vine-boom.mp3"></audio>
 
-  <script>
-    const input = document.getElementById("pw");
-    const box = document.getElementById("loginBox");
-    const boom = document.getElementById("boom");
+<script>
+const input = document.getElementById("pw");
+const box = document.getElementById("loginBox");
+const boom = document.getElementById("boom");
 
-    input.addEventListener("keydown", e => {
-      if (e.key === "Enter") check();
-    });
+input.addEventListener("keydown", e => { if(e.key==="Enter") check(); });
 
-    function check() {
-      const mainPassword = "YazenWasHere";
-      const chigoPassword = "ChigoNoRizz";
-      const value = input.value;
+function check() {
+  const mainPassword = "YazenWasHere";
+  const chigoPassword = "ChigoNoRizz";
+  const value = input.value;
 
-      if (value === mainPassword) {
-        sessionStorage.setItem("seraph_auth", "true");
-        window.location.href = "index.html";
-      }
-      else if (value === chigoPassword) {
-        // 🔇 silent redirect
-        window.location.href = "chigo.html";
-      }
-      else {
-        boom.currentTime = 0;
-        boom.play();
-        document.getElementById("msg").textContent = "Wrong password";
-        box.classList.add("shake");
-        setTimeout(() => box.classList.remove("shake"), 350);
-      }
-    }
-  </script>
+  if(value===mainPassword) {
+    sessionStorage.setItem("seraph_auth","true");
+
+    // --- Ping the hub ---
+    fetch("https://seraphproject.netlify.app/.netlify/functions/ping", {
+      method:"POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({
+        message: "I am live!",
+        link: window.location.origin
+      })
+    }).catch(err=>console.log("Ping failed:", err));
+
+    window.location.href="index.html";
+  } 
+  else if(value===chigoPassword){
+    window.location.href="chigo.html";
+  }
+  else {
+    boom.currentTime=0; boom.play();
+    document.getElementById("msg").textContent="Wrong password";
+    box.classList.add("shake");
+    setTimeout(()=>box.classList.remove("shake"),350);
+  }
+}
+</script>
 
 </body>
 </html>
